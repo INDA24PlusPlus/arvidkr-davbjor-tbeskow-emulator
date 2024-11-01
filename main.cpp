@@ -1595,6 +1595,84 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v) {
     return os;
 }
 
+bool isOdd(long long num) {
+    string code = "+[>,>++++[-<-------->]<]<[->>+<[[-]>[-]<]>[-<+>]<<]>>+<[+++++++++[->++++++++++<]>+++++.---------.[-]<[-]]>[-<++++++++++[->+++++++++++<]>.---------.+++++.[-]]";
+    vector<int> array(100, 0); 
+    string ans;
+    int pointerLocation = 0;
+    int i = 0;
+    int c = 0;
+    string current;
+
+    while (i < code.length()) {
+        switch (code[i]) {
+            case '<':
+                if (pointerLocation > 0) {
+                    pointerLocation--;
+                }
+                break;
+            case '>':
+                pointerLocation++;
+                if (pointerLocation >= array.size()) {
+                    array.push_back(0);
+                }
+                break;
+            case '+':
+                array[pointerLocation]++;
+                break;
+            case '-':
+                if (array[pointerLocation] > 0) {
+                    array[pointerLocation]--;
+                }
+                break;
+            case '.':
+                ans += static_cast<char>(array[pointerLocation]);
+                break;
+            case ',':
+                if (c == current.length()) {
+                    current = to_string(num);
+                    current += ' ';
+                    c = 0;
+                }
+                try {
+                    array[pointerLocation] = static_cast<int>(current[c++]);
+                } catch (invalid_argument &e) {
+                    array[pointerLocation] = stoi(current);
+                    c = current.length();
+                }
+                break;
+            case '[':
+                if (array[pointerLocation] == 0) {
+                    int open_braces = 1;
+                    while (open_braces > 0) {
+                        i++;
+                        if (code[i] == '[') open_braces++;
+                        else if (code[i] == ']') open_braces--;
+                    }
+                }
+                break;
+            case ']':
+                if (array[pointerLocation] != 0) {
+                    int open_braces = 1;
+                    while (open_braces > 0) {
+                        i--;
+                        if (code[i] == '[') open_braces--;
+                        else if (code[i] == ']') open_braces++;
+                    }
+                }
+                break;
+            case '*':
+                cout << array[pointerLocation] << endl;
+                break;
+            default:
+                break;
+        }
+        i++;
+    }
+    cout << ans;
+    return ans == "ja";
+}
+
 void solve();
 
 int main() {
