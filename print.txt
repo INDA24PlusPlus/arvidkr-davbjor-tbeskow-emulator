@@ -1,0 +1,25 @@
+//PSEUDO CODE FOR print.asm
+a = 1
+b = 1
+c = 0
+
+d = b                       % d is temp
+b += a
+a = d                       % a,b is fib
+
+c += 1                      % counter
+
+e = 0x10                    % x coord
+f = 0x10                    % y coord
+
+disp_clear()
+I = sprite_addr_y(a)        % print first digit in a
+draw(e,f,5)
+
+I = sprite_addr_x(a)        % print second digit in a
+e = 0x18
+draw(e,f,5)
+
+
+if(c == 0x0B)               % if counter is 11 -> break
+goto 0x006                  % go to fib function
