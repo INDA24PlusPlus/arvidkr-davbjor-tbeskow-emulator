@@ -26,6 +26,7 @@ struct Chip8 {
     vector<uint8_t> memory;
     vector<uint8_t> reg;
     uint16_t POS; 
+    uint16_t I;
 
     Chip8() : memory(MEMORY_SIZE, 0), reg(16), POS(0){}
 
@@ -96,6 +97,15 @@ struct Chip8 {
             }
             case 0x9000: // Vx != Vy
                 if (reg[(opcode&0x0F00) >> 8] != reg[(opcode&0x00F0) >> 4]) POS += 2;
+                break;
+            case 0xA000:
+                I = opcode&0x0FFF;
+                break;
+            case 0xB000:
+                POS = reg[0] + opcode&0x0FFF;
+                break;
+            case 0xC000:
+                reg[(opcode&0x0F00) >> 8] = rand()&(opcode&0x00FF);
                 break;
                 
             default:
