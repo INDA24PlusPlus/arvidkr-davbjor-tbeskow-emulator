@@ -58,14 +58,46 @@ struct Chip8 {
                     case 0x0: // Vx = Vy
                         reg[(opcode&0x0F00)>>8] = reg[(opcode&0x00F0) >> 4];
                         break;
+                    case 0x1: // Vx |= Vy
+                        reg[(opcode&0x0F00) >> 8] |= reg[(opcode&0x00F0) >> 4];
+                        break;
+                    case 0x2: // Vx &= Vy
+                        reg[(opcode&0x0F00) >> 8] &= reg[(opcode&0x00F0) >> 4];
+                        break;
+                    case 0x3: // Vx ^= Vy
+                        reg[(opcode&0x0F00) >> 8] ^= reg[(opcode&0x00F0) >> 4];
+                        break;
                     case 0x4: // Vx += Vy
+                        if (255-reg[(opcode&0x0F00) >> 8] < reg[(opcode&0x00F0) >> 4])reg[15] = 1;
+                        else reg[15] = 0;
                         reg[(opcode&0x0F00) >> 8] += reg[(opcode&0x00F0) >> 4];
+                        break;
+                    case 0x5: // Vx -= Vy
+                        if (reg[(opcode&0x0F00) >> 8] < reg[(opcode&0x00F0) >> 4])reg[15] = 0;
+                        else reg[15] = 1;
+                        reg[(opcode&0x0F00) >> 8] -= reg[(opcode&0x00F0) >> 4];
+                        break;
+                    case 0x6: // Vx >>= 1
+                        reg[15] = reg[(opcode&0x0F00) >> 8]&1;
+                        reg[(opcode&0x0F00) >> 8] = reg[(opcode&0x0F00) >> 8] >> 1;
+                        break;
+                    case 0x7: // Vx = Vy - Vx
+                        if (reg[(opcode&0x0F00) >> 8] > reg[(opcode&0x00F0) >> 4])reg[15] = 0;
+                        else reg[15] = 1;
+                        reg[(opcode&0x0F00) >> 8] = reg[(opcode&0x00F0) >> 4] - reg[(opcode&0x0F00) >> 8];
+                        break;
+                    case 0xE: // Vx <<= 1
+                        reg[(opcode&0x0F00) >> 8] = reg[(opcode&0x0F00) >> 8] << 1;
                         break;
                     default:
                         break;
                 }
                 break;
             }
+            case 0x9000: // Vx != Vy
+                if (reg[(opcode&0x0F00) >> 8] != reg[(opcode&0x00F0) >> 4]) POS += 2;
+                break;
+                
             default:
                 break;
         }
