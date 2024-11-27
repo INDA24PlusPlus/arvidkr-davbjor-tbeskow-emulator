@@ -22,7 +22,7 @@ typedef vector<pl> vpl;
 typedef vector<vl> vvl;
 typedef vector<vpl> vvpl;
 
-const int INTERVAL = 300;
+const int INTERVAL = 150;
 const int MEMORY_SIZE = 4096;
 const int START_ADDRESS = 0x200;
 
